@@ -493,16 +493,16 @@ with tab_genere:
     <p class="section-label">Seconda analisi</p>
     <p class="section-title">Distribuzione di genere nelle strutture decisionali</p>
     """, unsafe_allow_html=True)
-
+ 
     st.markdown("""
     <div class="insight-box">
         Incrociando la variabile <b>Gender</b> con <b>Type of organisation</b> e
         <b>Organisational body</b> si calcola la quota di presenze femminili per ciascuna
-        tipologia di ente, come ministeri, aziende, federazioni sportive, rendendo leggibili
+        tipologia di ente — ministeri, aziende, federazioni sportive — rendendo leggibili
         le differenze strutturali nella rappresentanza di genere tra i diversi settori della rete.
     </div>
     """, unsafe_allow_html=True)
-
+ 
     if positions_filtered is not None and len(positions_filtered) > 0:
         gender_by_type = (
             positions_filtered.groupby(["Type of organisation", "Organisational body", "Gender"])
@@ -510,23 +510,22 @@ with tab_genere:
             .unstack(fill_value=0)
             .reset_index()
         )
-
-        gender_by_type.rename(columns={"Female":"Femmina", "Male":"Maschio"}, inplace=True)
-
+        gender_by_type.rename(columns={"Female": "Femmina", "Male": "Maschio"}, inplace=True)
+ 
         fig = px.bar(
             gender_by_type,
             x="Type of organisation",
-            y=['Femmina', 'Maschio'],
+            y=["Femmina", "Maschio"],
             hover_data=["Organisational body"],
             barmode="stack",
-            color_discrete_map={'Femmina': 'red', 'Maschio': 'blue'},
+            color_discrete_map=GENDER_COLORS,
         )
         fig.update_layout(**PLOTLY_LAYOUT)
         fig.update_layout(height=480, xaxis_title="Tipo di organizzazione", yaxis_title="Numero di posizioni")
         st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
     else:
         st.info("Nessun dato disponibile con i filtri correnti.")
-
+ 
     st.markdown("<div class='divider'></div>", unsafe_allow_html=True)
 
 # ══════════════════════════════════════════════════════════════════════════
