@@ -10,7 +10,7 @@ import streamlit as st
 
 # ── CONFIGURAZIONE PAGINA ────────────────────────────────────────────────────
 st.set_page_config(
-    page_title="Saudi Arabia's network in sport",
+    page_title="Sport Saudita — Play the Game 2023",
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -49,7 +49,7 @@ AXIS_COLOR  = "#a8cfe0"
 TEXT_COLOR  = "#1a3a4f"
 CHART_FONT  = "Plus Jakarta Sans"
 
-GENDER_COLORS = {"Female": "#E85933", "Male": "#25465D"}
+GENDER_COLORS = {"Femmina": "#E85933", "Maschio": "#25465D"}
 SPONSOR_COLORS = {"Diretta": "#2E86AB", "Sussidiaria": "#F4A261"}
 
 PLOTLY_LAYOUT = dict(
@@ -106,7 +106,7 @@ html, body, [class*="css"] {
 [data-testid="stAppViewContainer"],
 [data-testid="stAppViewBlockContainer"],
 .main, .block-container {
-    background-color: #eef3f7!important;
+    background-color: #4FC3F7 !important;
 }
 
 /* ── Sidebar ── */
@@ -261,19 +261,6 @@ div[data-testid="stMainBlockContainer"] div[data-testid="stSelectbox"] > div > d
     border: 1.5px solid #b3dff5 !important;
     border-radius: 8px !important;
 }
-
-/* ── Dropdown multiselect (react-aria, renderizzato in portal) ── */
-div[role="listbox"] {
-    background-color: #1a3a4f !important;
-}
-div[role="listbox"] div[role="option"],
-div[role="listbox"] div[role="option"] div {
-    color: #ffffff !important;
-}
-div[role="listbox"] div[role="option"]:hover,
-div[role="listbox"] div[role="option"][aria-selected="true"] {
-    background-color: rgba(79,195,247,0.25) !important;
-}
 </style>
 """, unsafe_allow_html=True)
 
@@ -284,12 +271,51 @@ SPONSORS_PATH  = "sponsors.csv"
 COL_PARENT = "Sponsor name (parent entity) - click here for explanation"
 COL_SUB    = "Sponsor name (subsidiary / affiliate entity - if any) - click here for explanation"
 
+# ── Traduzioni IT ──────────────────────────────────────────────────────────────
+TIPO_ORG_IT = {
+    "Company": "Azienda",
+    "Embassy": "Ambasciata",
+    "Ministry": "Ministero",
+    "Other": "Altro",
+    "Sports organisation": "Organizzazione sportiva",
+}
+
+SPORT_IT = {
+    "Athletics": "Atletica",
+    "Basketball": "Basket",
+    "Boxing": "Pugilato",
+    "Climbing": "Arrampicata",
+    "Cricket": "Cricket",
+    "Cycling": "Ciclismo",
+    "Equestrian": "Equitazione",
+    "Esports": "Esport",
+    "Football": "Calcio",
+    "Golf": "Golf",
+    "Handball": "Pallamano",
+    "Hockey": "Hockey",
+    "MMA": "MMA",
+    "Motorsport": "Motorsport",
+    "Multisport": "Multisport",
+    "Polo": "Polo",
+    "Sailing": "Vela",
+    "Sea Sports and Diving": "Sport acquatici e immersioni",
+    "Table Tennis": "Tennistavolo",
+    "Tennis": "Tennis",
+    "Triathlon": "Triathlon",
+    "Weightlifting": "Sollevamento pesi",
+    "Wrestling": "Lotta",
+}
+
 
 @st.cache_data
 def carica_dati():
     try:
         positions = pd.read_csv(POSITIONS_PATH)
         sponsors = pd.read_csv(SPONSORS_PATH)
+
+        # ── Traduzione in italiano ──
+        positions["Type of organisation"] = positions["Type of organisation"].map(TIPO_ORG_IT).fillna(positions["Type of organisation"])
+        sponsors["Sport"] = sponsors["Sport"].map(SPORT_IT).fillna(sponsors["Sport"])
 
         # ── Pulizia sponsors (dal notebook) ──
         sponsors = sponsors.rename(columns={
@@ -323,8 +349,8 @@ with st.sidebar:
     <div style="display:flex;align-items:center;gap:0.8rem;margin-bottom:0.5rem;margin-top:-1rem;">
         {logo_tag(70, border_radius_full=True)}
         <div>
-            <div style="font-size:1.0rem;font-weight:700;color:#fff;line-height:1.2;">
-                SAUDI ARABIA'S NETWORK IN SPORT
+            <div style="font-size:0.95rem;font-weight:700;color:#fff;line-height:1.2;">
+                Sport Saudita — Play the Game
             </div>
         </div>
     </div>
@@ -365,13 +391,36 @@ with st.sidebar:
 # ── HEADER ────────────────────────────────────────────────────────────────────
 st.markdown(f"""
 <div class="main-header">
-    {logo_tag(75)}
+    {logo_tag(65)}
     <div style="flex:1;">
-        <h1>DASHBOARD - SAUDI ARABIA'S NETWORK IN SPORT</h1>
+        <h1>Presenza Saudita nello Sport Internazionale</h1>
         <p>Dataset Play the Game (2023) · Posizioni individuali e sponsorizzazioni sportive</p>
     </div>
 </div>
 """, unsafe_allow_html=True)
+
+with st.expander("Nota metodologica"):
+    st.markdown("""
+**Fonti dei dati:** Play the Game, *Overview of Saudi Arabia's Network in Sport*
+(2023) — fogli "Positions" (posizioni individuali in entità saudite) e
+"Sponsors" (sponsorizzazioni sportive attive).
+
+**Copertura:** Il dataset non è limitato al territorio saudita: mappa la
+presenza di individui, organizzazioni e capitali sauditi nella governance e
+nelle sponsorizzazioni dello sport a livello internazionale (federazioni,
+club, competizioni ed enti in tutto il mondo).
+
+**Corrispondenza tra nomenclature:** Nel foglio "Sponsors" la distinzione tra
+sponsorizzazione "Diretta" e "Sussidiaria" è stata ricostruita a partire dal
+campo che indica l'eventuale entità subsidiary/affiliate: quando tale campo
+riporta "Direct sponsorship" la sponsorizzazione è classificata come diretta,
+altrimenti come sussidiaria, usando il nome dell'entità affiliata indicata.
+
+**Periodo di riferimento:** Il dataset è una fotografia relativa al 2023 e
+non una serie storica: i conteggi di posizioni e sponsorizzazioni riflettono
+la situazione rilevata da Play the Game in quell'anno, non l'evoluzione nel
+tempo.
+    """)
 
 # ── FILTRAGGIO DATI ───────────────────────────────────────────────────────────
 if positions is not None and sponsors is not None:
@@ -452,7 +501,7 @@ with tab_potere:
     <div class="insight-box">
         Per ciascun individuo presente nel dataset viene calcolato il numero di posizioni
         ricoperte simultaneamente in organizzazioni distinte. Il grafico identifica i soggetti
-        con il maggiore peso sistemico all'interno della rete. Figure come Yasir Al-Rumayyan,
+        con il maggiore peso sistemico all'interno della rete — figure come Yasir Al-Rumayyan,
         che ricopre posizioni in Aramco, PIF, LIV Golf, Newcastle United e numerose federazioni
         sportive, emergono come nodi ad altissima centralità.
     </div>
@@ -493,7 +542,7 @@ with tab_genere:
     <p class="section-label">Seconda analisi</p>
     <p class="section-title">Distribuzione di genere nelle strutture decisionali</p>
     """, unsafe_allow_html=True)
- 
+
     st.markdown("""
     <div class="insight-box">
         Incrociando la variabile <b>Gender</b> con <b>Type of organisation</b> e
@@ -502,7 +551,7 @@ with tab_genere:
         le differenze strutturali nella rappresentanza di genere tra i diversi settori della rete.
     </div>
     """, unsafe_allow_html=True)
- 
+
     if positions_filtered is not None and len(positions_filtered) > 0:
         gender_by_type = (
             positions_filtered.groupby(["Type of organisation", "Organisational body", "Gender"])
@@ -511,7 +560,7 @@ with tab_genere:
             .reset_index()
         )
         gender_by_type.rename(columns={"Female": "Femmina", "Male": "Maschio"}, inplace=True)
- 
+
         fig = px.bar(
             gender_by_type,
             x="Type of organisation",
@@ -525,7 +574,7 @@ with tab_genere:
         st.plotly_chart(fig, use_container_width=True, config={"displayModeBar": False})
     else:
         st.info("Nessun dato disponibile con i filtri correnti.")
- 
+
     st.markdown("<div class='divider'></div>", unsafe_allow_html=True)
 
 # ══════════════════════════════════════════════════════════════════════════
@@ -541,8 +590,9 @@ with tab_sponsor:
     <div class="insight-box">
         A partire dal foglio <b>Sponsors</b>, l'aggregazione per <b>Sport</b> quantifica il peso
         relativo di ciascuna disciplina nel portafoglio complessivo degli investimenti sauditi.
-        Il treemap distingue tra sponsorizzazioni <b>dirette</b> e quelle
-        <b>sussidiarie</b>, mostrando anche il nome dello sponsor specifico.
+        Il treemap distingue tra sponsorizzazioni <b>dirette</b> e quelle operate tramite
+        <b>entità sussidiarie o affiliate</b>, mostrando fino al nome dello sponsor specifico
+        ed evidenziando la struttura societaria sottostante agli accordi.
     </div>
     """, unsafe_allow_html=True)
 
@@ -573,31 +623,3 @@ with tab_sponsor:
         st.info("Nessun dato disponibile con i filtri correnti.")
 
     st.markdown("<div class='divider'></div>", unsafe_allow_html=True)
-
-
-# ══════════════════════════════════════════════════════════════════════════
-# NOTA METODOLOGICA
-# ══════════════════════════════════════════════════════════════════════════
-
-with st.expander("Nota metodologica"):
-    st.markdown("""
-**Fonti dei dati:** Play the Game, *Overview of Saudi Arabia's Network in Sport*
-(2023) — fogli "Positions" (posizioni individuali in entità saudite) e
-"Sponsors" (sponsorizzazioni sportive attive).
-
-**Copertura:** Il dataset non è limitato al territorio saudita: mappa la
-presenza di individui, organizzazioni e capitali sauditi nella governance e
-nelle sponsorizzazioni dello sport a livello internazionale (federazioni,
-club, competizioni ed enti in tutto il mondo).
-
-**Corrispondenza tra nomenclature:** Nel foglio "Sponsors" la distinzione tra
-sponsorizzazione "Diretta" e "Sussidiaria" è stata ricostruita a partire dal
-campo che indica l'eventuale entità subsidiary/affiliate: quando tale campo
-riporta "Direct sponsorship" la sponsorizzazione è classificata come diretta,
-altrimenti come sussidiaria, usando il nome dell'entità affiliata indicata.
-
-**Periodo di riferimento:** Il dataset è una fotografia relativa al 2023 e
-non una serie storica: i conteggi di posizioni e sponsorizzazioni riflettono
-la situazione rilevata da Play the Game in quell'anno, non l'evoluzione nel
-tempo.
-    """)
