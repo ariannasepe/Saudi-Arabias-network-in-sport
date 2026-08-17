@@ -477,7 +477,6 @@ with tab_potere:
             individui,
             x="Organizzazioni distinte",
             y="Full name",
-            title="Organizations count per name",
             orientation="h",
             color="Full name",
         )
