@@ -519,7 +519,7 @@ with tab_genere:
             y=['Femmina', 'Maschio'],
             hover_data=["Organisational body"],
             barmode="stack",
-            color_discrete_map=GENDER_COLORS,
+            color_discrete_map={'Femmina': 'red', 'Maschio': 'blue'},
         )
         fig.update_layout(**PLOTLY_LAYOUT)
         fig.update_layout(height=480, xaxis_title="Tipo di organizzazione", yaxis_title="Numero di posizioni")
