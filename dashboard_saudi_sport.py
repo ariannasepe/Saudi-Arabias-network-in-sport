@@ -511,12 +511,12 @@ with tab_genere:
             .reset_index()
         )
 
-        y_cols = [c for c in ["Female", "Male"] if c in gender_by_type.columns]
+        gender_by_type.rename(columns={"Female":"Femmina", "Male":"Maschio"}, inplace=True)
 
         fig = px.bar(
             gender_by_type,
             x="Type of organisation",
-            y=y_cols,
+            y=['Femmina', 'Maschio'],
             hover_data=["Organisational body"],
             barmode="stack",
             color_discrete_map=GENDER_COLORS,
