@@ -199,7 +199,7 @@ footer { visibility: hidden; }
     position: absolute; top: 0; left: 0; right: 0; height: 3px;
 }
 .kpi-card .kpi-label {
-    font-size: 0.58rem; font-weight: 700;
+    font-size: 0.62rem; font-weight: 700;
     letter-spacing: 1.3px; text-transform: uppercase;
     color: #666; margin-bottom: 0.4rem;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
