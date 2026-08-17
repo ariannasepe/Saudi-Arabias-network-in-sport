@@ -140,6 +140,10 @@ section[data-testid="stSidebar"] div[data-testid="stMultiSelect"] > div > div {
     border: 1px solid rgba(255,255,255,0.2) !important;
     border-radius: 8px !important;
 }
+section[data-testid="stSidebar"] input::placeholder {
+    color: #d9edf7 !important;
+    opacity: 1 !important;
+}
 section[data-testid="stSidebar"] div[data-testid="stMultiSelect"] span[data-baseweb="tag"] {
     background-color: rgba(79,195,247,0.3) !important;
     border-radius: 6px !important;
