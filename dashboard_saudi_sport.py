@@ -262,16 +262,16 @@ div[data-testid="stMainBlockContainer"] div[data-testid="stSelectbox"] > div > d
     border-radius: 8px !important;
 }
 
-/* ── Dropdown multiselect (renderizzato in portal, fuori dalla sidebar) ── */
-ul[data-baseweb="menu"] li,
-ul[data-baseweb="menu"] li div,
-ul[data-baseweb="menu"] li span {
-    color: #ffffff !important;
-}
-ul[data-baseweb="menu"] {
+/* ── Dropdown multiselect (react-aria, renderizzato in portal) ── */
+div[role="listbox"] {
     background-color: #1a3a4f !important;
 }
-ul[data-baseweb="menu"] li:hover {
+div[role="listbox"] div[role="option"],
+div[role="listbox"] div[role="option"] div {
+    color: #ffffff !important;
+}
+div[role="listbox"] div[role="option"]:hover,
+div[role="listbox"] div[role="option"][aria-selected="true"] {
     background-color: rgba(79,195,247,0.25) !important;
 }
 </style>
