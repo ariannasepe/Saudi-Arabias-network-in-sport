@@ -261,6 +261,19 @@ div[data-testid="stMainBlockContainer"] div[data-testid="stSelectbox"] > div > d
     border: 1.5px solid #b3dff5 !important;
     border-radius: 8px !important;
 }
+
+/* ── Dropdown multiselect (renderizzato in portal, fuori dalla sidebar) ── */
+ul[data-baseweb="menu"] li,
+ul[data-baseweb="menu"] li div,
+ul[data-baseweb="menu"] li span {
+    color: #ffffff !important;
+}
+ul[data-baseweb="menu"] {
+    background-color: #1a3a4f !important;
+}
+ul[data-baseweb="menu"] li:hover {
+    background-color: rgba(79,195,247,0.25) !important;
+}
 </style>
 """, unsafe_allow_html=True)
 
